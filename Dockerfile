@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as builder
+FROM alpine as builder
 
 # Atualizando pacotes
 RUN apt update -y 
@@ -37,7 +37,7 @@ RUN mkdir aws
 
 
 # STAGE 2
-FROM ubuntu:22.04
+FROM alpine
 
 WORKDIR /work
 
