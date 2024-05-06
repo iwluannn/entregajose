@@ -82,7 +82,6 @@ jobs:
           echo $COMMIT_SHA
           docker tag apicontainer:latest iwluann/apicontainer:$COMMIT_SHA
           docker push iwluann/apicontainer:$COMMIT_SHA
-<<<<<<< HEAD
      
       - name: Terraform Apply
         if: always()
@@ -92,42 +91,3 @@ jobs:
           terraform apply -var="github_sha=$COMMIT_SHA" --auto-approve
         env:
           GITHUB_SHA: ${{ github.sha }}
-=======
-
-          name: Deploy EC2 and Start API
-          on:
-            push:
-              branches:
-                - main
-          jobs:
-            deploy:
-              runs-on: alpine
-
-            steps:
-            - name: Checkout repository
-              uses: actions/checkout@v2
-      
-            - name: Set up Terraform
-              uses: hashicorp/setup-terraform@v1
-              with:
-                terraform_version: 1.0.0
-      
-            - name: Initialize Terraform
-              run: terraform init
-      
-            - name: Plan Terraform changes
-              run: terraform plan
-      
-            - name: Apply Terraform changes
-              run: terraform apply -auto-approve
-
-            - name: Install SSH client
-              run: apk add --no-cache openssh-client
-              
-            - name: Copy SSH private key
-              run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-              
-            - name: SSH into EC2 instance and start API
-              run: ssh -i ~/.ssh/id_rsa ec2-user@${{ secrets.EC2_PUBLIC_IP }} 'sudo docker run -d -p 8080:8080 minha-api'
-
->>>>>>> 426221bbcc24035048391571e1a64b8233eaabdd
